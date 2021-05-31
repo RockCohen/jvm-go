@@ -1,19 +1,29 @@
 package main
 
 import (
+	"classpath"
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // Cmd
 /**
 该结构体来表示命令行参数与选项
+成员说明：
+1. helpFlag 帮助选项
+2. versionFlag 版本选项
+3. cpOption 类路径选项
+4. XjreOption Java虚拟机将使用JDK的启动类路径来寻找和加载Java标准库中的类.该参数指定加载的jre的目录。
+5. class 指定类路径
+6. args 参数
 */
 type Cmd struct {
 	helpFlag    bool
 	versionFlag bool
 	cpOption    string
+	XjreOption  string
 	class       string
 	args        []string
 }
@@ -39,6 +49,7 @@ func parseCmd() *Cmd {
 	flag.BoolVar(&cmd.versionFlag, "version", false, "print version and exit")
 	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
 	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
+	flag.StringVar(&cmd.XjreOption, "Xjre", "", "path to jre")
 	flag.Parse()
 	args := flag.Args()
 	if len(args) > 0 {
@@ -59,20 +70,14 @@ func printUsage() {
 目前版本的JVM啥也没实现，直接打印输出信息表示JVM启动
 */
 func startJVM(cmd *Cmd) {
-	fmt.Printf("classpath:%s class:%s args:%v\n",
-		cmd.cpOption, cmd.class, cmd.args)
-}
-
-/**
-执行方法入口
-*/
-func main() {
-	cmd := parseCmd()
-	if cmd.versionFlag {
-		fmt.Println("version 0.0.1")
-	} else if cmd.helpFlag || cmd.class == "" {
-		printUsage()
-	} else {
-		startJVM(cmd)
+	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	fmt.Printf("classpath:%v class:%v args:%v\n",
+		cp, cmd.class, cmd.args)
+	className := strings.Replace(cmd.class, ".", "/", -1)
+	classData, _, err := cp.ReadClass(className)
+	if err != nil {
+		fmt.Printf("Could not find or load main class %s\n", cmd.class)
+		return
 	}
+	fmt.Printf("class data:%v\n", classData)
 }
