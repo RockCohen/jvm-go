@@ -5,6 +5,12 @@ import (
 	"strings"
 )
 
+// CompositeEntry
+/**
+CompositeEntry由更小的Entry组成，正好可以表示
+成[]Entry。在Go语言中，数组属于比较低层的数据结构，很少直接
+使用。大部分情况下，使用更便利的slice类型。
+*/
 type CompositeEntry []Entry
 
 func newCompositeEntry(paths string) CompositeEntry {

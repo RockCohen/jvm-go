@@ -9,7 +9,16 @@ const pathListSeparator = string(os.PathListSeparator)
 
 // Entry
 /**
-类路径项
+在加载主类之前，jvm首先会加载它的超类，如果没有明确的继承关系，那么其父类便是:java.lang.Object。
+执行main方法之前还需要加载java.lang.String类以及java.lang.String[].
+于是虚拟机面临这样一个问题：虚拟机如何寻找需要加载的类的。
+
+Java虚拟机规范并没有规定虚拟机去哪里加载类，于是实现方式由虚拟机实现者自定。通常的实现是：根据类路径来搜索类。通常分为三种类：
+1. 启动类路径 默认对应jre/lib
+2. 扩展类路径 默认对应jre/lib/ext
+3. 用户类路径 默认当前目录
+
+类路径接口表示
 */
 type Entry interface {
 	/**
@@ -25,6 +34,14 @@ type Entry interface {
 	String() string
 }
 
+/**
+Entry构造函数
+Entry有四种具体的方法来构造分别为：
+1. CompositeEntry
+2. WildcardEntry(CompositeEntry)
+3. ZipEntry
+4. DirEntry 目录形式的类路径
+*/
 func newEntry(path string) Entry {
 	if strings.Contains(path, pathListSeparator) {
 		return newCompositeEntry(path)

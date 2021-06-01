@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+//使用通配符的方式表示加载类
 func newWildcardEntry(path string) CompositeEntry {
 	baseDir := path[:len(path)-1] // remove *
 	compositeEntry := []Entry{}
