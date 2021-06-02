@@ -4,6 +4,8 @@ import "fmt"
 
 // ClassFile
 /**
+ 解析 ClassReader 读取到的class文件数据
+
 class文件结构体
 构成class文件的基本数据单位是字节，可以把整个class文件当成一个字节流来处理。
 
@@ -15,7 +17,7 @@ class文件结构体
 
 java的class文件的结构如下：
 
-_ClassFile{
+Class{
 	u4                	magic;
 	u2                	minor_version;
 	u2 					major_version;
@@ -75,16 +77,16 @@ func Parse(classData []byte) (cf *ClassFile, err error) {
 // read
 // read 执行具体的解析过程
 func (self *ClassFile) read(reader *ClassReader) {
-	self.readAndCheckMagic(reader)               // 见 3.2.3
-	self.readAndCheckVersion(reader)             // 见 3.2.4
-	self.constantPool = readConstantPool(reader) // 见 3.3
-	self.accessFlags = reader.readUint16()
-	self.thisClass = reader.readUint16()
-	self.superClass = reader.readUint16()
-	self.interfaces = reader.readUint16s()
-	self.fields = readMembers(reader, self.constantPool) // 见 3.2.8
-	self.methods = readMembers(reader, self.constantPool)
-	self.attributes = readAttributes(reader, self.constantPool) //见 3.4
+	self.readAndCheckMagic(reader)                              // 魔数检查
+	self.readAndCheckVersion(reader)                            // 版本检查
+	self.constantPool = readConstantPool(reader)                // 获取常量池的内容
+	self.accessFlags = reader.readUint16()                      // 访问权限
+	self.thisClass = reader.readUint16()                        // 自类
+	self.superClass = reader.readUint16()                       // 超类
+	self.interfaces = reader.readUint16s()                      // 接口
+	self.fields = readMembers(reader, self.constantPool)        // 实例成员
+	self.methods = readMembers(reader, self.constantPool)       // 方法成员
+	self.attributes = readAttributes(reader, self.constantPool) //属性表
 }
 
 // MajorVersion
@@ -109,7 +111,7 @@ func (self *ClassFile) SuperClassName() string {
 }
 
 // InterfaceNames
-// InterfaceNames 从常量池中获取接口名
+// InterfaceNames 从常量池中获取接口名，由于接口的数量可能存在多个，所以这里需要一个数组进行存放
 func (self *ClassFile) InterfaceNames() []string {
 	interfaceNames := make([]string, len(self.interfaces))
 	for i, cpIndex := range self.interfaces {
@@ -129,6 +131,8 @@ func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {
 
 // readAndCheckVersion
 // readAndCheckVersion 检查版本号是否支持
+// 这里支持JDK 8以下的版本号
+// 如需要支持更多版本号，直接添加版本号即可。
 func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {
 	self.minorVersion = reader.readUint16()
 	self.majorVersion = reader.readUint16()

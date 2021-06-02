@@ -1,5 +1,6 @@
 package classfile
 
+// 定义常量池中的各种类型数据的编号
 const (
 	CONSTANT_Class              = 7
 	CONSTANT_Fieldref           = 9

@@ -5,6 +5,8 @@ import "encoding/binary"
 // ClassReader
 /**
 ClassReader 用于读取class文件作格式化处理
+读取u1,u2,u4,u8等数据类型
+
 */
 type ClassReader struct {
 	data []byte // 存放class文件的字节数组
@@ -44,6 +46,7 @@ func (self *ClassReader) readUint64() uint64 {
 
 // 用于获取u2类型的表
 func (self *ClassReader) readUint16s() []uint16 {
+	//获取表长
 	length := self.readUint16()
 	s := make([]uint16, length) //内存分配函数
 	for i := range s {

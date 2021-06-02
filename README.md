@@ -4,14 +4,30 @@
 用go语言实现的java虚拟机
 
 #### 软件架构
-软件架构说明
+workspace: jvm-go
+
+​      |- jvm-go
+
+​          |- src
+
+​              |- classfile
+
+​              |- classpath
+
+​              |- main
+
+​           |- bin
+
+​           |- pkg
+
+​           
 
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  install golang
+2.  set the GOPATH
+3.  run the code
 
 #### 使用说明
 
