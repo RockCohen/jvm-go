@@ -2,18 +2,18 @@ package classfile
 
 // MemberInfo
 /**
-实例成员的信息类
+class文件中的字段表与方法表具有相同的结构，其结构如下：
 class文件中关于实例成员的结构如下：
 field_info {
-	u2 					access_flags;
-	u2 					name_index;
-	u2 					descriptor_index;
+	u2 					access_flags;			字段或者方法的访问权限
+	u2 					name_index;				指向常量池的索引
+	u2 					descriptor_index;		指向常量池的索引
 	u2 					attributes_count;
 	attribute_info 		attributes[attributes_count];
 }
 */
 type MemberInfo struct {
-	cp              ConstantPool //cp字段保存常量池指针，
+	cp              ConstantPool //cp字段保存常量池指针
 	accessFlags     uint16
 	nameIndex       uint16
 	descriptorIndex uint16
