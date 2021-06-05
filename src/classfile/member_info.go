@@ -3,7 +3,8 @@ package classfile
 // MemberInfo
 /**
 实例成员的信息类
-class文件中关于实例成员的结构如下：
+class文件中关于实例成员与方法成员的结构如下：
+
 field_info {
 	u2 					access_flags;
 	u2 					name_index;
@@ -21,8 +22,14 @@ type MemberInfo struct {
 }
 
 // readMembers
-// readMembers（）读取字 段表或方法表
+// readMembers（）读取字段表或方法表
 func readMembers(reader *ClassReader, cp ConstantPool) []*MemberInfo {
+	/**
+	u2 					fields_count;
+	field_info 			fields[fields_count];
+	u2 					methods_count;
+	method_info 		methods[methods_count];
+	*/
 	memberCount := reader.readUint16()
 	members := make([]*MemberInfo, memberCount)
 	for i := range members {

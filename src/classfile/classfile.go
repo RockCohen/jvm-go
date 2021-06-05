@@ -94,6 +94,21 @@ func (self *ClassFile) read(reader *ClassReader) {
 func (self *ClassFile) MajorVersion() uint16 {
 	return self.majorVersion
 }
+func (self *ClassFile) MinorVersion() uint16 {
+	return self.minorVersion
+}
+func (self *ClassFile) ConstantPool() ConstantPool {
+	return self.constantPool
+}
+func (self *ClassFile) AccessFlags() uint16 {
+	return self.accessFlags
+}
+func (self *ClassFile) Fields() []*MemberInfo {
+	return self.fields
+}
+func (self *ClassFile) Methods() []*MemberInfo {
+	return self.methods
+}
 
 // ClassName
 // ClassName 从常量池中获取类名
