@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"rtda"
+	"strings"
 )
 
 // Cmd
@@ -78,9 +79,28 @@ func startJVM(cmd *Cmd) {
 	//cf := loadClass(className, cp)
 	//fmt.Printf(cmd.class)
 	//printClassInfo(cf)
-	frame := rtda.NewFrame(100, 100)
-	testLocalVars(frame.GetLocalVars())
-	testOperandStack(frame.GetOperandStack())
+	//frame := rtda.NewFrame(100, 100)
+	//testLocalVars(frame.LocalVars())
+	//testOperandStack(frame.OperandStack())
+	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	className := strings.Replace(cmd.class, ".", "/", -1)
+	cf := loadClass(className, cp)
+	mainMethod := getMainMethod(cf)
+	if mainMethod != nil {
+		interpret(mainMethod)
+	} else {
+		fmt.Printf("Main method not found in class %s\n", cmd.class)
+	}
+
+}
+
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }
 func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
 	classData, _, err := cp.ReadClass(className)
@@ -93,6 +113,7 @@ func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
 	}
 	return cf
 }
+
 func printClassInfo(cf *classfile.ClassFile) {
 	fmt.Printf(" version:  %v.%v\n", cf.MajorVersion(), cf.MinorVersion())
 	fmt.Printf("constants count: %v\n", len(cf.ConstantPool()))
