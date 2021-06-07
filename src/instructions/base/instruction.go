@@ -6,7 +6,7 @@ import "rtda"
 /**
 字节码指令的通用接口
 包括两个方法：
-1. FetchOperands : 获取字节码指令中的操作数
+1. FetchOperands : 从字节码中提取操作数
 2. Execute : 执行字节码指令
 */
 type Instruction interface {
@@ -15,7 +15,7 @@ type Instruction interface {
 }
 
 // NoOperandsInstruction
-// 表示什么都不用作的字节码指令，其实现的接口方法体为空
+// 表示没有操作数的字节码指令，故其操作数获取方法为空
 type NoOperandsInstruction struct{}
 
 func (self *NoOperandsInstruction) FetchOperands(reader *BytecodeReader) {
@@ -24,6 +24,7 @@ func (self *NoOperandsInstruction) FetchOperands(reader *BytecodeReader) {
 
 // BranchInstruction
 // 跳转指令
+// offset 代表指令偏移量
 type BranchInstruction struct {
 	Offset int
 }

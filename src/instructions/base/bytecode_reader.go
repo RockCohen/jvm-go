@@ -1,5 +1,11 @@
 package base
 
+// BytecodeReader
+// 对Code属性里面的字节码内容进行进一步的定义，存放字节码进行字节码的解释执行
+/**
+code  用来存放字节码
+pc	  记录当前字节码索引
+*/
 type BytecodeReader struct {
 	code []byte
 	pc   int
@@ -35,6 +41,10 @@ func (self *BytecodeReader) ReadInt32() int32 {
 	byte4 := int32(self.ReadUint8())
 	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4
 }
+
+/**
+下面两个方法用于指令：tableswitch和lookupswitch指令
+*/
 
 func (self *BytecodeReader) SkipPadding() {
 	for self.pc%4 != 0 {

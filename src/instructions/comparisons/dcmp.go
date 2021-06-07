@@ -5,7 +5,7 @@ import (
 	"rtda"
 )
 
-// Compare double
+// DCMPG Compare double
 type DCMPG struct{ base.NoOperandsInstruction }
 
 func (self *DCMPG) Execute(frame *rtda.Frame) {

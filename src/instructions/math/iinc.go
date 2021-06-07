@@ -6,6 +6,10 @@ import (
 )
 
 // IINC Increment local variable by constant
+/**
+iinc指令给局部变量表中的int变量增加常量值，局部变量表索
+引和常量值都由指令的操作数提供。
+*/
 type IINC struct {
 	Index uint
 	Const int32

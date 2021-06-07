@@ -5,6 +5,10 @@ import (
 	"rtda"
 )
 
+/**
+常量指令，将隐含在操作指令中的操作数放进操作栈中。
+*/
+
 type ACONST_NULL struct{ base.NoOperandsInstruction }
 type DCONST_0 struct{ base.NoOperandsInstruction }
 type DCONST_1 struct{ base.NoOperandsInstruction }

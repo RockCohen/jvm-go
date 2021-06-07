@@ -1,5 +1,13 @@
 package rtda
 
+// Stack
+// 对Java虚拟机栈的定义
+/**
+ Java虚拟机栈应该包括三个元素：
+maxSize			栈的最大容量
+size			栈当前的容量
+_top			栈帧
+*/
 type Stack struct {
 	maxSize uint   //栈的最大容量
 	size    uint   //当前栈的大小

@@ -1,7 +1,19 @@
 package rtda
 
-import "math"
+import (
+	"math"
+	"rtda/heap"
+)
 
+// OperandStack
+// 对操作数栈的定义
+/**
+由于编译器在编译Java程序时已经将操作数栈的最大容量记录在class文件的Code属性中。
+所以直接利用Slot数组进行操作数栈的模拟。
+
+	size	栈顶指针（指向栈顶元素的下一个位置）
+	slots	Slot数组，存放具体的操作数
+*/
 type OperandStack struct {
 	size  uint
 	slots []Slot
@@ -54,16 +66,20 @@ func (self *OperandStack) PopDouble() float64 {
 	bits := uint64(self.PopLong())
 	return math.Float64frombits(bits)
 }
-func (self *OperandStack) PushRef(ref *Object) {
+func (self *OperandStack) PushRef(ref *heap.Object) {
 	self.slots[self.size].ref = ref
 	self.size++
 }
-func (self *OperandStack) PopRef() *Object {
+func (self *OperandStack) PopRef() *heap.Object {
 	self.size--
 	ref := self.slots[self.size].ref
-	self.slots[self.size].ref = nil
+	self.slots[self.size].ref = nil // 使用go的垃圾回收技术进行垃圾回收
 	return ref
 }
+
+/**
+下面两个方法用于栈指令的操作，由于栈相关的指令不关心数据的类型，所以直接操作即可。
+*/
 
 func (self *OperandStack) PushSlot(slot Slot) {
 	self.slots[self.size] = slot

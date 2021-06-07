@@ -5,7 +5,7 @@ import (
 	"rtda"
 )
 
-// Convert double to float
+// D2F Convert double to float
 type D2F struct{ base.NoOperandsInstruction }
 
 func (self *D2F) Execute(frame *rtda.Frame) {
@@ -15,7 +15,7 @@ func (self *D2F) Execute(frame *rtda.Frame) {
 	stack.PushFloat(f)
 }
 
-// Convert double to int
+// D2I Convert double to int
 type D2I struct{ base.NoOperandsInstruction }
 
 func (self *D2I) Execute(frame *rtda.Frame) {
@@ -25,7 +25,7 @@ func (self *D2I) Execute(frame *rtda.Frame) {
 	stack.PushInt(i)
 }
 
-// Convert double to long
+// D2L Convert double to long
 type D2L struct{ base.NoOperandsInstruction }
 
 func (self *D2L) Execute(frame *rtda.Frame) {

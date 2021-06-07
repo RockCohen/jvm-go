@@ -6,6 +6,14 @@ import (
 )
 
 // DUP Duplicate the top operand stack value
+/**
+栈指令直接对操作数栈进行操作，共9条：pop和pop2指令将栈
+顶变量弹出，dup系列指令复制栈顶变量，swap指令交换栈顶的两
+个变量。
+和其他类型的指令不同，栈指令并不关心变量类型。
+
+栈指令的操作数就在栈中，直接进行栈相关操作即可获得，故继承 base.NoOperandsInstruction
+*/
 type DUP struct{ base.NoOperandsInstruction }
 
 // Execute

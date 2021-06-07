@@ -5,7 +5,7 @@ import (
 	"rtda"
 )
 
-// Branch if int comparison succeeds
+// IF_ICMPEQ Branch if int comparison succeeds
 type IF_ICMPEQ struct{ base.BranchInstruction }
 
 func (self *IF_ICMPEQ) Execute(frame *rtda.Frame) {

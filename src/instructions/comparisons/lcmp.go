@@ -6,6 +6,11 @@ import (
 )
 
 // LCMP Compare long
+/**
+比较指令可以分为两类：一类将比较结果推入操作数栈顶，一
+类根据比较结果跳转。比较指令是编译器实现if-else、for、while等
+语句的基石
+*/
 type LCMP struct{ base.NoOperandsInstruction }
 
 func (self *LCMP) Execute(frame *rtda.Frame) {

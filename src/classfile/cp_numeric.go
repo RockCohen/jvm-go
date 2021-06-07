@@ -1,6 +1,8 @@
 package classfile
 
-import "math"
+import (
+	"math"
+)
 
 // 该文件主要定义基本数据类型的引用：
 //1. Integer

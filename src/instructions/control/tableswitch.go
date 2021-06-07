@@ -7,21 +7,28 @@ import (
 
 // TABLE_SWITCH
 /*
+Java语言中的switch-case语句有两种实现方式：如果case值可以
+编码成一个索引表，则实现成tableswitch指令；否则实现成
+lookupswitch指令。
 tableswitch
-<0-3 byte pad>
-defaultbyte1
-defaultbyte2
-defaultbyte3
-defaultbyte4
-lowbyte1
-lowbyte2
-lowbyte3
-lowbyte4
-highbyte1
-highbyte2
-highbyte3
-highbyte4
-jump offsets...
+	<0-3 byte pad>
+
+	defaultbyte1
+	defaultbyte2
+	defaultbyte3
+	defaultbyte4
+
+	lowbyte1
+	lowbyte2
+	lowbyte3
+	lowbyte4
+
+	highbyte1
+	highbyte2
+	highbyte3
+	highbyte4
+
+	jump offsets...
 */
 // Access jump table by index and jump
 type TABLE_SWITCH struct {
