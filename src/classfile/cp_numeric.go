@@ -2,6 +2,7 @@ package classfile
 
 import (
 	"math"
+	"rtda/heap"
 )
 
 // 该文件主要定义基本数据类型的引用：
@@ -34,6 +35,10 @@ func (self *ConstantIntegerInfo) readInfo(reader *ClassReader) {
 	self.val = int32(bytes)
 }
 
+func (self *ConstantIntegerInfo) Value() heap.Constant {
+	return self.val
+}
+
 // ConstantFloatInfo
 // 32位浮点数引用
 type ConstantFloatInfo struct {
@@ -43,6 +48,9 @@ type ConstantFloatInfo struct {
 func (self *ConstantFloatInfo) readInfo(reader *ClassReader) {
 	bytes := reader.readUint32()
 	self.val = math.Float32frombits(bytes)
+}
+func (self *ConstantFloatInfo) Value() heap.Constant {
+	return self.val
 }
 
 // ConstantLongInfo
@@ -56,6 +64,10 @@ func (self *ConstantLongInfo) readInfo(reader *ClassReader) {
 	self.val = int64(bytes)
 }
 
+func (self *ConstantLongInfo) Value() heap.Constant {
+	return self.val
+}
+
 // ConstantDoubleInfo
 // 64双精度浮点数引用
 type ConstantDoubleInfo struct {
@@ -65,4 +77,7 @@ type ConstantDoubleInfo struct {
 func (self *ConstantDoubleInfo) readInfo(reader *ClassReader) {
 	bytes := reader.readUint64()
 	self.val = math.Float64frombits(bytes)
+}
+func (self *ConstantDoubleInfo) Value() heap.Constant {
+	return self.val
 }

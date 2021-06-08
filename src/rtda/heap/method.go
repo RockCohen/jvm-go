@@ -4,9 +4,9 @@ import "classfile"
 
 type Method struct {
 	ClassMember
-	maxStack  uint
-	maxLocals uint
-	code      []byte
+	maxStack  uint   // 操作数栈的大小
+	maxLocals uint   //局部变量的大小
+	code      []byte //存放字节码
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {

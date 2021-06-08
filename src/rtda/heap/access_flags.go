@@ -1,5 +1,6 @@
 package heap
 
+// 类，方法，字段的访问权限
 const (
 	ACC_PUBLIC       = 0x0001 // class field method
 	ACC_PRIVATE      = 0x0002 // field method

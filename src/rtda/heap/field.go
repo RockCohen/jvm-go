@@ -2,6 +2,7 @@ package heap
 
 import "classfile"
 
+// Field 直接对 ClassMember 进行封装
 type Field struct {
 	ClassMember
 	constValueIndex uint

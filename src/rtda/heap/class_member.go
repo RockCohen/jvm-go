@@ -2,6 +2,8 @@ package heap
 
 import "classfile"
 
+// ClassMember
+// 字段与方法的堆区数据结构
 type ClassMember struct {
 	accessFlags uint16
 	name        string

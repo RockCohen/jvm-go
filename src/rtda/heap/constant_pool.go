@@ -5,12 +5,21 @@ import (
 	"fmt"
 )
 
-type Constant interface{}
+// ConstantPool
+/**
+  运行时常量池里面存放两种变量：字面量与符号引用
+  字面量：整数、浮点数和字符串字面量
+  符号引用：类符号引用、字段符号引用、方法符号引用和接口方法符号引用
+*/
+
 type ConstantPool struct {
 	class  *Class
 	consts []Constant
 }
 
+type Constant interface{}
+
+// newConstantPool 将class文件中的常量池转换为运行时常量池
 func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 	cpCount := len(cfCp)
 	consts := make([]Constant, cpCount)
@@ -37,16 +46,16 @@ func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 			consts[i] = stringInfo.String() // string
 		case *classfile.ConstantClassInfo:
 			classInfo := cpInfo.(*classfile.ConstantClassInfo)
-			consts[i] = newClassRef(rtCp, classInfo) // 见 6.2.1小节
+			consts[i] = newClassRef(rtCp, classInfo) // 类引用
 		case *classfile.ConstantFieldrefInfo:
 			fieldrefInfo := cpInfo.(*classfile.ConstantFieldrefInfo)
-			consts[i] = newFieldRef(rtCp, fieldrefInfo) // 见 6.2.2小节
+			consts[i] = newFieldRef(rtCp, fieldrefInfo) // 字段引用
 		case *classfile.ConstantMethodrefInfo:
 			methodrefInfo := cpInfo.(*classfile.ConstantMethodrefInfo)
-			consts[i] = newMethodRef(rtCp, methodrefInfo) // 见 6.2.3小节
+			consts[i] = newMethodRef(rtCp, methodrefInfo) // 方法引用
 		case *classfile.ConstantInterfaceMethodrefInfo:
 			methodrefInfo := cpInfo.(*classfile.ConstantInterfaceMethodrefInfo)
-			consts[i] = newInterfaceMethodRef(rtCp, methodrefInfo) // 见 6.2.4小节
+			consts[i] = newInterfaceMethodRef(rtCp, methodrefInfo) // 接口实例引用
 
 		}
 	}
