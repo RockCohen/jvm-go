@@ -2,6 +2,7 @@ package heap
 
 import (
 	"classfile"
+	"strings"
 )
 
 // Class 类数据结构体
@@ -9,9 +10,10 @@ import (
 当Java虚拟机加载到类之后，会解析类文件将数据放入方法区中，也就是说我们需要定义一个结构体来存放类的相关信息。
 定义Class类来存放解析类文件的信息。
 */
+// name, superClassName and interfaceNames are all binary names(jvms8-4.2.1)
 type Class struct {
 	accessFlags       uint16
-	name              string
+	name              string // thisClassName
 	superClassName    string
 	interfaceNames    []string
 	constantPool      *ConstantPool
@@ -20,12 +22,11 @@ type Class struct {
 	loader            *ClassLoader
 	superClass        *Class
 	interfaces        []*Class
-	instanceSlotCount uint   // 	实例变量占据的空间大小
-	staticSlotCount   uint   // 类变量占据的空间大小
-	staticVars        *Slots // 用来存放静态变量
+	instanceSlotCount uint
+	staticSlotCount   uint
+	staticVars        Slots
 }
 
-// newClass 将 classfile.ClassFile 转换成 Class
 func newClass(cf *classfile.ClassFile) *Class {
 	class := &Class{}
 	class.accessFlags = cf.AccessFlags()
@@ -61,4 +62,45 @@ func (self *Class) IsAnnotation() bool {
 }
 func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
+}
+
+// getters
+func (self *Class) ConstantPool() *ConstantPool {
+	return self.constantPool
+}
+func (self *Class) StaticVars() Slots {
+	return self.staticVars
+}
+
+// jvms 5.4.4
+func (self *Class) isAccessibleTo(other *Class) bool {
+	return self.IsPublic() ||
+		self.getPackageName() == other.getPackageName()
+}
+
+func (self *Class) getPackageName() string {
+	if i := strings.LastIndex(self.name, "/"); i >= 0 {
+		return self.name[:i]
+	}
+	return ""
+}
+
+func (self *Class) GetMainMethod() *Method {
+	return self.getStaticMethod("main", "([Ljava/lang/String;)V")
+}
+
+func (self *Class) getStaticMethod(name, descriptor string) *Method {
+	for _, method := range self.methods {
+		if method.IsStatic() &&
+			method.name == name &&
+			method.descriptor == descriptor {
+
+			return method
+		}
+	}
+	return nil
+}
+
+func (self *Class) NewObject() *Object {
+	return newObject(self)
 }

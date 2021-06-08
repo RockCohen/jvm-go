@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"rtda"
+	"rtda/heap"
 	"strings"
 )
 
@@ -82,10 +83,20 @@ func startJVM(cmd *Cmd) {
 	//frame := rtda.NewFrame(100, 100)
 	//testLocalVars(frame.LocalVars())
 	//testOperandStack(frame.OperandStack())
+	//cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	//className := strings.Replace(cmd.class, ".", "/", -1)
+	//cf := loadClass(className, cp)
+	//mainMethod := getMainMethod(cf)
+	//if mainMethod != nil {
+	//	interpret(mainMethod)
+	//} else {
+	//	fmt.Printf("Main method not found in class %s\n", cmd.class)
+	//}
 	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	classLoader := heap.NewClassLoader(cp)
 	className := strings.Replace(cmd.class, ".", "/", -1)
-	cf := loadClass(className, cp)
-	mainMethod := getMainMethod(cf)
+	mainClass := classLoader.LoadClass(className)
+	mainMethod := mainClass.GetMainMethod()
 	if mainMethod != nil {
 		interpret(mainMethod)
 	} else {

@@ -1,5 +1,7 @@
 package rtda
 
+import "rtda/heap"
+
 // Frame stack frame
 // 对栈帧的定义
 /**
@@ -20,11 +22,14 @@ Thread Stack Frame 的关系如下：
 |	pc	    |		   | size/maxSize|        |     .....   |
 -------------          ---------------        ---------------
 */
+
+// Frame stack frame
 type Frame struct {
 	lower        *Frame // stack is implemented as linked list
 	localVars    LocalVars
 	operandStack *OperandStack
 	thread       *Thread
+	method       *heap.Method
 	nextPC       int // the next instruction after the call
 }
 
@@ -32,18 +37,16 @@ type Frame struct {
 执行方法所需的局部变量表大小和操作数栈深度是由编译器
 预先计算好的，存储在class文件method_info结构的Code属性中
 */
-func newFrame(thread *Thread, maxLocals, maxStack uint) *Frame {
+func newFrame(thread *Thread, method *heap.Method) *Frame {
 	return &Frame{
 		thread:       thread,
-		localVars:    newLocalVars(maxLocals),
-		operandStack: newOperandStack(maxStack),
+		method:       method,
+		localVars:    newLocalVars(method.MaxLocals()),
+		operandStack: newOperandStack(method.MaxStack()),
 	}
 }
 
-// LocalVars
-/**
-getter and setter
-*/
+// getters & setters
 func (self *Frame) LocalVars() LocalVars {
 	return self.localVars
 }
@@ -52,6 +55,9 @@ func (self *Frame) OperandStack() *OperandStack {
 }
 func (self *Frame) Thread() *Thread {
 	return self.thread
+}
+func (self *Frame) Method() *heap.Method {
+	return self.method
 }
 func (self *Frame) NextPC() int {
 	return self.nextPC

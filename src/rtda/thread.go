@@ -1,5 +1,7 @@
 package rtda
 
+import "rtda/heap"
+
 // Thread
 // 对线程级的封装
 // Java虚拟机运行时数据区域可以分为线程私有与多线程共享
@@ -42,6 +44,6 @@ func (self *Thread) CurrentFrame() *Frame {
 	return self.stack.top()
 }
 
-func (self *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
-	return newFrame(self, maxLocals, maxStack)
+func (self *Thread) NewFrame(method *heap.Method) *Frame {
+	return newFrame(self, method)
 }
