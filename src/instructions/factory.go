@@ -14,6 +14,10 @@ import (
 	. "instructions/stores"
 )
 
+/**
+译码器
+*/
+
 var (
 	nop         = &NOP{}
 	aconst_null = &ACONST_NULL{}
@@ -165,6 +169,8 @@ var (
 	// invoke_native = &INVOKE_NATIVE{}
 )
 
+// NewInstruction
+// 多路译码器
 func NewInstruction(opcode byte) base.Instruction {
 	switch opcode {
 	case 0x00:

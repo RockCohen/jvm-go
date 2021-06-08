@@ -8,7 +8,11 @@ import (
 	"rtda"
 )
 
-// Extend local variable index by additional bytes
+// WIDE Extend local variable index by additional bytes
+/**
+扩展类指令主要解决局部变量表中变量的数量大于一个字节（256）的情况
+wide指令只是增加了索引宽度
+*/
 type WIDE struct {
 	modifiedInstruction base.Instruction
 }

@@ -35,17 +35,18 @@ func loop(thread *rtda.Thread, bytecode []byte) {
 	reader := &base.BytecodeReader{}
 
 	for {
+		//执行当前栈帧，获取指令计数器
 		pc := frame.NextPC()
 		thread.SetPC(pc)
 
-		// decode
+		// 解码译码decode
 		reader.Reset(bytecode, pc)
 		opcode := reader.ReadUint8()
 		inst := instructions.NewInstruction(opcode)
 		inst.FetchOperands(reader)
 		frame.SetNextPC(reader.PC())
 
-		// execute
+		// 指令执行execute
 		fmt.Printf("pc:%2d inst:%T %v\n", pc, inst, inst)
 		inst.Execute(frame)
 	}

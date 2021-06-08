@@ -5,7 +5,7 @@ import (
 	"rtda"
 )
 
-// Branch always (wide index)
+// GOTO_W Branch always (wide index)
 type GOTO_W struct {
 	offset int
 }
