@@ -25,6 +25,7 @@ type Class struct {
 	instanceSlotCount uint
 	staticSlotCount   uint
 	staticVars        Slots
+	initStarted       bool
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -63,8 +64,14 @@ func (self *Class) IsAnnotation() bool {
 func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
 }
+func (self *Class) InitStarted() bool {
+	return self.initStarted
+}
 
 // getters
+func (self *Class) Name() string {
+	return self.name
+}
 func (self *Class) ConstantPool() *ConstantPool {
 	return self.constantPool
 }
@@ -84,6 +91,9 @@ func (self *Class) getPackageName() string {
 	}
 	return ""
 }
+func (self *Class) GetPackageName() string {
+	return self.getPackageName()
+}
 
 func (self *Class) GetMainMethod() *Method {
 	return self.getStaticMethod("main", "([Ljava/lang/String;)V")
@@ -100,7 +110,18 @@ func (self *Class) getStaticMethod(name, descriptor string) *Method {
 	}
 	return nil
 }
+func (self *Class) GetClinitMethod() *Method {
+	return self.getStaticMethod("<clinit>", "()V")
+}
 
 func (self *Class) NewObject() *Object {
 	return newObject(self)
+}
+
+func (self *Class) SuperClass() *Class {
+	return self.superClass
+}
+
+func (self *Class) StartInit() {
+	self.initStarted = true
 }

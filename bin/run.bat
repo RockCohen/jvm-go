@@ -1,0 +1,1 @@
+go_build_main.exe -Xjre "C:\Program Files\Java\jdk1.8.0_291\jre" InvokeDemo

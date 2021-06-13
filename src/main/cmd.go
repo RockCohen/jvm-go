@@ -23,12 +23,14 @@ import (
 6. args 参数
 */
 type Cmd struct {
-	helpFlag    bool
-	versionFlag bool
-	cpOption    string
-	XjreOption  string
-	class       string
-	args        []string
+	helpFlag         bool
+	versionFlag      bool
+	verboseClassFlag bool
+	verboseInstFlag  bool
+	cpOption         string
+	XjreOption       string
+	class            string
+	args             []string
 }
 
 /**
@@ -92,13 +94,24 @@ func startJVM(cmd *Cmd) {
 	//} else {
 	//	fmt.Printf("Main method not found in class %s\n", cmd.class)
 	//}
+	//cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	//classLoader := heap.NewClassLoader(cp)
+	//className := strings.Replace(cmd.class, ".", "/", -1)
+	//mainClass := classLoader.LoadClass(className)
+	//mainMethod := mainClass.GetMainMethod()
+	//if mainMethod != nil {
+	//	interpret(mainMethod)
+	//} else {
+	//	fmt.Printf("Main method not found in class %s\n", cmd.class)
+	//}
+
 	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	classLoader := heap.NewClassLoader(cp)
+	classLoader := heap.NewClassLoader(cp, cmd.verboseClassFlag)
 	className := strings.Replace(cmd.class, ".", "/", -1)
 	mainClass := classLoader.LoadClass(className)
 	mainMethod := mainClass.GetMainMethod()
 	if mainMethod != nil {
-		interpret(mainMethod)
+		interpret(mainMethod, cmd.verboseInstFlag)
 	} else {
 		fmt.Printf("Main method not found in class %s\n", cmd.class)
 	}
