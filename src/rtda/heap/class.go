@@ -78,6 +78,9 @@ func (self *Class) ConstantPool() *ConstantPool {
 func (self *Class) StaticVars() Slots {
 	return self.staticVars
 }
+func (self *Class) Loader() *ClassLoader {
+	return self.loader
+}
 
 // jvms 5.4.4
 func (self *Class) isAccessibleTo(other *Class) bool {
@@ -114,6 +117,44 @@ func (self *Class) GetClinitMethod() *Method {
 	return self.getStaticMethod("<clinit>", "()V")
 }
 
+func (self *Class) getMethod(name, descriptor string, isStatic bool) *Method {
+	for c := self; c != nil; c = c.superClass {
+		for _, method := range c.methods {
+			if method.IsStatic() == isStatic &&
+				method.name == name &&
+				method.descriptor == descriptor {
+
+				return method
+			}
+		}
+	}
+	return nil
+}
+
+func (self *Class) getField(name, descriptor string, isStatic bool) *Field {
+	for c := self; c != nil; c = c.superClass {
+		for _, field := range c.fields {
+			if field.IsStatic() == isStatic &&
+				field.name == name &&
+				field.descriptor == descriptor {
+
+				return field
+			}
+		}
+	}
+	return nil
+}
+
+func (self *Class) IsJlObject() bool {
+	return self.name == "java/lang/Object"
+}
+func (self *Class) IsJlCloneable() bool {
+	return self.name == "java/lang/Cloneable"
+}
+func (self *Class) IsJioSerializable() bool {
+	return self.name == "java/io/Serializable"
+}
+
 func (self *Class) NewObject() *Object {
 	return newObject(self)
 }
@@ -124,4 +165,9 @@ func (self *Class) SuperClass() *Class {
 
 func (self *Class) StartInit() {
 	self.initStarted = true
+}
+
+func (self *Class) ArrayClass() *Class {
+	arrayClassName := getArrayClassName(self.name)
+	return self.loader.LoadClass(arrayClassName)
 }
