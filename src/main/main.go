@@ -1,13 +1,15 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 /**
 执行方法入口
 */
 func main() {
+	jvm()
+
+}
+func jvm() {
 	cmd := parseCmd()
 	if cmd.versionFlag {
 		fmt.Println("version 0.0.1")

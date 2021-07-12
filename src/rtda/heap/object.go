@@ -3,6 +3,7 @@ package heap
 type Object struct {
 	class *Class
 	data  interface{} //Go的interface{}类型很像C语言中的void*，该类型的变量可以容纳任何类型的值。
+	extra interface{}
 }
 
 func newObject(class *Class) *Object {
@@ -14,6 +15,12 @@ func newObject(class *Class) *Object {
 
 // getters
 
+func (self *Object) Extra() interface{} {
+	return self.extra
+}
+func (self *Object) SetExtra(extra interface{}) {
+	self.extra = extra
+}
 func (self *Object) Class() *Class {
 	return self.class
 }
